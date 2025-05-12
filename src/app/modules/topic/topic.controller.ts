@@ -3,15 +3,70 @@ import catchAsync from '../../utilities/catchasync';
 import sendResponse from '../../utilities/sendResponse';
 import TopicServices from './topic.service';
 
+// Create Topic
 const createTopic = catchAsync(async (req, res) => {
     const result = await TopicServices.createTopic(req.body);
     sendResponse(res, {
-        statusCode: httpStatus.OK,
+        statusCode: httpStatus.CREATED,
         success: true,
-        message: 'Profile updated successfully',
+        message: 'Topic created successfully',
         data: result,
     });
 });
 
-const TopicController = { createTopic };
+// Get All Topics
+const getAllTopics = catchAsync(async (req, res) => {
+    const result = await TopicServices.getAllTopics(req.query);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Topics retrieved successfully',
+        data: result,
+    });
+});
+
+// Get Topic by ID
+const getTopicById = catchAsync(async (req, res) => {
+    const { topicId } = req.params;
+    const result = await TopicServices.getTopicById(topicId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Topic retrieved successfully',
+        data: result,
+    });
+});
+
+// Update Topic
+const updateTopic = catchAsync(async (req, res) => {
+    const { topicId } = req.params;
+    const result = await TopicServices.updateTopic(topicId, req.body);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Topic updated successfully',
+        data: result,
+    });
+});
+
+// Delete Topic
+const deleteTopic = catchAsync(async (req, res) => {
+    const { topicId } = req.params;
+    const result = await TopicServices.deleteTopic(topicId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Topic deleted successfully',
+        data: result,
+    });
+});
+
+const TopicController = {
+    createTopic,
+    getAllTopics,
+    getTopicById,
+    updateTopic,
+    deleteTopic,
+};
+
 export default TopicController;

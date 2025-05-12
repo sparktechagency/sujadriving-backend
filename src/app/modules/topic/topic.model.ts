@@ -9,6 +9,10 @@ const TopicSchema = new Schema<ITopic>(
             ref: 'Category',
         },
         name: { type: String, required: true },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );
