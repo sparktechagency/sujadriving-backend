@@ -1,24 +1,17 @@
-import httpStatus from "http-status";
-import catchAsync from "../../utilities/catchasync";
-import sendResponse from "../../utilities/sendResponse";
-import topicServices from "./topic.service";
+import httpStatus from 'http-status';
+import catchAsync from '../../utilities/catchasync';
+import sendResponse from '../../utilities/sendResponse';
+import TopicServices from './topic.service';
 
-const updateUserProfile = catchAsync(async (req, res) => {
-    const { files } = req;
-    if (files && typeof files === "object" && "profile_image" in files) {
-        req.body.profile_image = files["profile_image"][0].path;
-    }
-    const result = await topicServices.updateUserProfile(
-        req.user.profileId,
-        req.body
-    );
+const createTopic = catchAsync(async (req, res) => {
+    const result = await TopicServices.createTopic(req.body);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: "Profile updated successfully",
+        message: 'Profile updated successfully',
         data: result,
     });
 });
 
-const TopicController = { updateUserProfile };
+const TopicController = { createTopic };
 export default TopicController;
