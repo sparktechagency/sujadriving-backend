@@ -43,3 +43,8 @@ export const ENUM_PAYMENT_STATUS = {
     PAID: 'PAID',
     UNPAID: 'UNPAID',
 };
+
+export const ENUM_TEST_TYPE = {
+    THEORY: 'THEORY',
+    ADI: 'ADI',
+};

@@ -11,7 +11,6 @@ const router = express.Router();
 router.post(
     '/create-category',
     auth(USER_ROLE.superAdmin),
-    // uploadImages(),
     uploadFile(),
     (req: Request, res: Response, next: NextFunction) => {
         if (req.body.data) {

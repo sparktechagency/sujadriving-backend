@@ -15,7 +15,6 @@ import { JwtPayload } from 'jsonwebtoken';
 import { createToken } from './user.utils';
 import config from '../../config';
 import SuperAdmin from '../superAdmin/superAdmin.model';
-import PackagePurchaseService from '../package-purchase/package-purchase.service';
 const generateVerifyCode = (): number => {
     return Math.floor(10000 + Math.random() * 900000);
 };
@@ -181,17 +180,7 @@ const deleteUserAccount = async (user: JwtPayload, password: string) => {
 const getMyProfile = async (userData: JwtPayload) => {
     let result = null;
     if (userData.role === USER_ROLE.user) {
-        const data = await NormalUser.findOne({ email: userData.email });
-        
-        const { totalTokens: normalToken } =
-            await PackagePurchaseService.getMyPurchaseToken(data?._id, {
-                packageType: 'NORMAL_CLASS',
-            });
-        const { totalTokens: popupToken } =
-            await PackagePurchaseService.getMyPurchaseToken(data?._id, {
-                packageType: 'POPUP_CLASS',
-            });
-        result = { ...data?.toObject(), normalToken, popupToken };
+        result = await NormalUser.findOne({ email: userData.email });
     } else if (userData.role === USER_ROLE.superAdmin) {
         result = await SuperAdmin.findOne({ email: userData.email });
     }

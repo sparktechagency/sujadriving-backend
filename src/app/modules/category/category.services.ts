@@ -3,7 +3,6 @@ import AppError from '../../error/appError';
 import mongoose from 'mongoose';
 import { ICategory } from './category.interface';
 import Category from './category.model';
-import Product from '../product/product.model';
 import { deleteFileFromS3 } from '../../helper/deleteFromS3';
 import QueryBuilder from '../../builder/QueryBuilder';
 
@@ -60,6 +59,7 @@ const getSingleCategory = async (id: string) => {
 
     return category;
 };
+
 // delete category
 const deleteCategoryFromDB = async (categoryId: string) => {
     const category = await Category.findById(categoryId);
@@ -77,13 +77,6 @@ const deleteCategoryFromDB = async (categoryId: string) => {
                 session,
             }
         );
-
-        await Product.updateMany(
-            { category: categoryId },
-            { isDeleted: true },
-            { new: true, runValidators: true, session }
-        );
-
         await session.commitTransaction();
         session.endSession();
 
