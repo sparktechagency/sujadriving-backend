@@ -9,6 +9,8 @@ import { bannerRoutes } from '../modules/banner/banner.routes';
 import { metaRoutes } from '../modules/meta/meta.routes';
 import { feedbackRoutes } from '../modules/feedback/feedback.routes';
 import { transactionRoutes } from '../modules/transaction/transaction.routes';
+import { topicRoutes } from '../modules/topic/topic.routes';
+import { questionRoutes } from '../modules/question/question.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -54,6 +56,16 @@ const moduleRoutes = [
     {
         path: '/transaction',
         router: transactionRoutes,
+    },
+
+    {
+        path: '/topic',
+        router: topicRoutes,
+    },
+
+    {
+        path: '/question',
+        router: questionRoutes,
     },
 ];
 
