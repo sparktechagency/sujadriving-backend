@@ -1,21 +1,87 @@
-import httpStatus from "http-status";
-import AppError from "../../error/appError";
-import { IHazard-video } from "./hazard-video.interface";
-import hazard-videoModel from "./hazard-video.model";
+import httpStatus from 'http-status';
+import AppError from '../../error/appError';
+import { IHazardVideo } from './hazard-video.interface';
+import HazardVideo from './hazard-video.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { deleteFileFromS3 } from '../../helper/deleteFromS3';
 
-const updateUserProfile = async (id: string, payload: Partial<IHazard-video>) => {
-    if (payload.email || payload.username) {
-        throw new AppError(httpStatus.BAD_REQUEST, "You cannot change the email or username");
+// Create
+const createHazardVideo = async (payload: IHazardVideo) => {
+    const result = await HazardVideo.create(payload);
+    return result;
+};
+
+// Get all
+const getAllHazardVideos = async (query: Record<string, unknown>) => {
+    const hazardVideoQuery = new QueryBuilder(HazardVideo.find(), query)
+        .search(['video_url'])
+        .fields()
+        .filter()
+        .paginate()
+        .sort();
+
+    const result = await hazardVideoQuery.modelQuery;
+    const meta = await hazardVideoQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
+};
+
+// Get a single
+const getHazardVideoById = async (id: string) => {
+    const result = await HazardVideo.findById(id).populate('hazardTopic');
+    if (!result) {
+        throw new AppError(httpStatus.NOT_FOUND, 'HazardVideo not found');
     }
-    const user = await hazard-videoModel.findById(id);
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, "Profile not found");
+    return result;
+};
+
+// Update
+const updateHazardVideo = async (
+    id: string,
+    payload: Partial<IHazardVideo>
+) => {
+    const hazardVideo = await HazardVideo.findById(id);
+    if (!hazardVideo) {
+        throw new AppError(httpStatus.NOT_FOUND, 'HazardVideo not found');
     }
-    return await hazard-videoModel.findByIdAndUpdate(id, payload, {
+
+    const result = await HazardVideo.findByIdAndUpdate(id, payload, {
         new: true,
         runValidators: true,
     });
+
+    if (!result) {
+        throw new AppError(httpStatus.NOT_FOUND, 'HazardVideo not found');
+    }
+
+    if (payload.video_url && hazardVideo.video_url) {
+        deleteFileFromS3(hazardVideo.video_url);
+    }
+    return result;
 };
 
-const Hazard-videoServices = { updateUserProfile };
-export default Hazard-videoServices;
+// Delete
+const deleteHazardVideo = async (id: string) => {
+    const result = await HazardVideo.findByIdAndDelete(id);
+    if (!result) {
+        throw new AppError(httpStatus.NOT_FOUND, 'HazardVideo not found');
+    }
+    if (result.video_url) {
+        deleteFileFromS3(result.video_url);
+    }
+
+    return result;
+};
+
+const HazardVideoService = {
+    createHazardVideo,
+    getAllHazardVideos,
+    getHazardVideoById,
+    updateHazardVideo,
+    deleteHazardVideo,
+};
+
+export default HazardVideoService;

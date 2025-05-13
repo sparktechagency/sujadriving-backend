@@ -1,25 +1,49 @@
-import express from "express";
-import auth from "../../middlewares/auth";
-import { USER_ROLE } from "../user/user.constant";
-import validateRequest from "../../middlewares/validateRequest";
-import hazard-videoValidations from "./hazard-video.validation";
-import hazard-videoController from "./hazard-video.controller";
-import { uploadFile } from "../../helper/fileUploader";
+import express from 'express';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constant';
+import validateRequest from '../../middlewares/validateRequest';
+import hazardVideoValidations from './hazard-video.validation';
+import hazardVideoController from './hazard-video.controller';
+import { uploadFile } from '../../helper/fileUploader';
 
 const router = express.Router();
 
-router.patch(
-    "/update-profile",
-    auth(USER_ROLE.user),
-    uploadFile(),
-    (req, res, next) => {
-        if (req.body.data) {
-            req.body = JSON.parse(req.body.data);
-        }
-        next();
-    },
-    validateRequest(hazard-videoValidations.updateHazard-videoData),
-    hazard-videoController.updateUserProfile
+// Create Hazard Video
+router.post(
+    '/create',
+    auth(USER_ROLE.admin),
+    validateRequest(hazardVideoValidations.createHazardVideoValidationSchema),
+    hazardVideoController.createHazardVideo
 );
 
-export const hazard-videoRoutes = router;
+// Get All Hazard Videos
+router.get(
+    '/get-all',
+    auth(USER_ROLE.user),
+    hazardVideoController.getAllHazardVideos
+);
+
+// Get Single Hazard Video
+router.get(
+    'get-single/:id',
+    auth(USER_ROLE.user),
+    hazardVideoController.getHazardVideoById
+);
+
+// Update Hazard Video
+router.patch(
+    'update/:id',
+    auth(USER_ROLE.admin),
+    uploadFile(),
+    validateRequest(hazardVideoValidations.updateHazardVideoValidationSchema),
+    hazardVideoController.updateHazardVideo
+);
+
+// Delete Hazard Video
+router.delete(
+    'delete/:id',
+    auth(USER_ROLE.admin),
+    hazardVideoController.deleteHazardVideo
+);
+
+export const hazardVideoRoutes = router;
