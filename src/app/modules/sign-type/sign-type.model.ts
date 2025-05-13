@@ -10,12 +10,8 @@ const categorySchema = new Schema<ISignType>({
         type: String,
         required: true,
     },
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    },
 });
 
-const Category = mongoose.model<ISignType>('Category', categorySchema);
+const SignType = mongoose.model<ISignType>('SignType', categorySchema);
 
-export default Category;
+export default SignType;
