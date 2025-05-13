@@ -11,6 +11,8 @@ import { feedbackRoutes } from '../modules/feedback/feedback.routes';
 import { transactionRoutes } from '../modules/transaction/transaction.routes';
 import { topicRoutes } from '../modules/topic/topic.routes';
 import { questionRoutes } from '../modules/question/question.routes';
+import { signTypeRoutes } from '../modules/sign-type/sign-type.routes';
+import { highwaySignRoutes } from '../modules/highway-sign/highway-sign.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -66,6 +68,14 @@ const moduleRoutes = [
     {
         path: '/question',
         router: questionRoutes,
+    },
+    {
+        path: '/sign-type',
+        router: signTypeRoutes,
+    },
+    {
+        path: '/highway-sign',
+        router: highwaySignRoutes,
     },
 ];
 
