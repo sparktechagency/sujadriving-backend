@@ -24,7 +24,7 @@ router.post(
 );
 
 // Route to update an existing SignType by ID
-router.put(
+router.patch(
     '/update/:id',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     uploadFile(),

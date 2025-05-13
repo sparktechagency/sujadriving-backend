@@ -27,7 +27,7 @@ router.get(
 );
 
 // Route to update a topic by ID
-router.put(
+router.patch(
     '/update-topic/:topicId',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     TopicController.updateTopic
