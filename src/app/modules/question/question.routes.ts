@@ -37,7 +37,7 @@ router.put(
     QuestionController.updateQuestion
 );
 
-// Delete Question
+// Delete Question----
 router.delete(
     'delete-question/:id',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin),
