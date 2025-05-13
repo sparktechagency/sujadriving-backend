@@ -11,6 +11,7 @@ declare namespace Express {
             course_banner?: File[];
             banner?: File[];
             class_banner?: File[];
+            icon?: File[];
         };
     }
 }
