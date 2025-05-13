@@ -1,12 +1,23 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const updateHighway-signData = z.object({
+// Zod schema for creating a new HighwaySign
+const createHighwaySignValidationSchema = z.object({
     body: z.object({
-        name: z.string().optional(),
-        phone: z.string().optional(),
-        address: z.string().optional(),
+        signType: z.string().min(1, 'Sign type is required'),
+        description: z.string().min(1, 'Description is required'),
     }),
 });
 
-const Highway-signValidations = { updateHighway-signData };
-export default Highway-signValidations;
+// Zod schema for updating an existing HighwaySign
+const updateHighwaySignValidationSchema = z.object({
+    signType: z.string().optional(),
+    sign_image: z.string().optional(),
+    description: z.string().optional(),
+});
+
+const HighWaySignValidations = {
+    createHighwaySignValidationSchema,
+    updateHighwaySignValidationSchema,
+};
+
+export default HighWaySignValidations;
