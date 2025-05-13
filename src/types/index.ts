@@ -12,6 +12,7 @@ declare namespace Express {
             banner?: File[];
             class_banner?: File[];
             icon?: File[];
+            sign_image?: File[];
         };
     }
 }
