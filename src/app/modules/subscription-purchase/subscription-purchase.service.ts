@@ -1,21 +1,50 @@
-import httpStatus from "http-status";
-import AppError from "../../error/appError";
-import { ISubscription-purchase } from "./subscription-purchase.interface";
-import subscription-purchaseModel from "./subscription-purchase.model";
+import httpStatus from 'http-status';
+import AppError from '../../error/appError';
+import Subscription from '../subscription/subscription.model';
+import { stripe } from '../../utilities/stripe';
+import SubscriptionPurchase from './subscription-purchase.model';
 
-const updateUserProfile = async (id: string, payload: Partial<ISubscription-purchase>) => {
-    if (payload.email || payload.username) {
-        throw new AppError(httpStatus.BAD_REQUEST, "You cannot change the email or username");
+const purchaseSubscription = async (userId: string, subscriptionId: string) => {
+    const subscription = await Subscription.findById(subscriptionId);
+    if (!subscription) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Subscription not found');
     }
-    const user = await subscription-purchaseModel.findById(id);
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, "Profile not found");
-    }
-    return await subscription-purchaseModel.findByIdAndUpdate(id, payload, {
-        new: true,
-        runValidators: true,
+
+    const subscriptionPurchase = await SubscriptionPurchase.create({
+        user: userId,
+        subscription: subscriptionId,
     });
+
+    const amount = subscription.price * 100;
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+            {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: subscription.type,
+                        description: subscription.description,
+                    },
+                    unit_amount: amount,
+                },
+                quantity: 1,
+            },
+        ],
+        metadata: {
+            userId,
+            subscriptionPurchaseId: subscriptionPurchase._id.toString(),
+        },
+        mode: 'payment',
+        success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.BASE_URL}/cancel`,
+    });
+
+    return { payemnt_url: session.url };
 };
 
-const Subscription-purchaseServices = { updateUserProfile };
-export default Subscription-purchaseServices;
+const SubscriptionPurchaseService = {
+    purchaseSubscription,
+};
+
+export default SubscriptionPurchaseService;
