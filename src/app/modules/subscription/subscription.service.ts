@@ -1,21 +1,78 @@
-import httpStatus from "http-status";
-import AppError from "../../error/appError";
-import { ISubscription } from "./subscription.interface";
-import subscriptionModel from "./subscription.model";
+import httpStatus from 'http-status';
+import AppError from '../../error/appError';
+import { ISubscription } from './subscription.interface';
+import Subscription from './subscription.model';
+import QueryBuilder from '../../builder/QueryBuilder';
 
-const updateUserProfile = async (id: string, payload: Partial<ISubscription>) => {
-    if (payload.email || payload.username) {
-        throw new AppError(httpStatus.BAD_REQUEST, "You cannot change the email or username");
+// Create
+const createSubscription = async (payload: ISubscription) => {
+    const result = await Subscription.create(payload);
+    return result;
+};
+
+// Get all
+const getAllSubscriptions = async (query: Record<string, unknown>) => {
+    const subscriptionQuery = new QueryBuilder(Subscription.find(), query)
+        .search(['type', 'description'])
+        .fields()
+        .filter()
+        .paginate()
+        .sort();
+
+    const result = await subscriptionQuery.modelQuery;
+    const meta = await subscriptionQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
+};
+
+// Get a single
+const getSubscriptionById = async (id: string) => {
+    const result = await Subscription.findById(id);
+    if (!result) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Subscription not found');
     }
-    const user = await subscriptionModel.findById(id);
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, "Profile not found");
+    return result;
+};
+
+// Update
+const updateSubscription = async (
+    id: string,
+    payload: Partial<ISubscription>
+) => {
+    const subscription = await Subscription.findById(id);
+    if (!subscription) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Subscription not found');
     }
-    return await subscriptionModel.findByIdAndUpdate(id, payload, {
+
+    const result = await Subscription.findByIdAndUpdate(id, payload, {
         new: true,
         runValidators: true,
     });
+
+    if (!result) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Subscription not found');
+    }
+    return result;
 };
 
-const SubscriptionServices = { updateUserProfile };
-export default SubscriptionServices;
+// Delete
+const deleteSubscription = async (id: string) => {
+    const result = await Subscription.findByIdAndDelete(id);
+    if (!result) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Subscription not found');
+    }
+    return result;
+};
+
+const SubscriptionService = {
+    createSubscription,
+    getAllSubscriptions,
+    getSubscriptionById,
+    updateSubscription,
+    deleteSubscription,
+};
+
+export default SubscriptionService;
