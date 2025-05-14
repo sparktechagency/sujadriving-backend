@@ -33,7 +33,6 @@ const getAllHazardVideos = catchAsync(async (req, res) => {
 const getHazardVideoById = catchAsync(async (req, res) => {
     const { id } = req.params;
     const result = await HazardVideoService.getHazardVideoById(id);
-
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
