@@ -3,6 +3,7 @@ import AppError from '../../error/appError';
 import Subscription from '../subscription/subscription.model';
 import { stripe } from '../../utilities/stripe';
 import SubscriptionPurchase from './subscription-purchase.model';
+import { ENUM_PAYMENT_PURPOSE } from '../../utilities/enum';
 
 const purchaseSubscription = async (userId: string, subscriptionId: string) => {
     const subscription = await Subscription.findById(subscriptionId);
@@ -34,6 +35,7 @@ const purchaseSubscription = async (userId: string, subscriptionId: string) => {
         metadata: {
             userId,
             subscriptionPurchaseId: subscriptionPurchase._id.toString(),
+            paymentPurpose: ENUM_PAYMENT_PURPOSE.PURCHASE_SUBSCRIPTION,
         },
         mode: 'payment',
         success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
