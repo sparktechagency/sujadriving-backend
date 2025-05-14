@@ -15,6 +15,7 @@ import { signTypeRoutes } from '../modules/sign-type/sign-type.routes';
 import { highwaySignRoutes } from '../modules/highway-sign/highway-sign.routes';
 import { hazardVideoRoutes } from '../modules/hazard-video/hazard-video.routes';
 import { subscriptionRoutes } from '../modules/subscription/subscription.routes';
+import { subscriptionPurchaseRoutes } from '../modules/subscription-purchase/subscription-purchase.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -90,6 +91,10 @@ const moduleRoutes = [
     {
         path: '/subscription',
         router: subscriptionRoutes,
+    },
+    {
+        path: '/subscription-purchase',
+        router: subscriptionPurchaseRoutes,
     },
 ];
 

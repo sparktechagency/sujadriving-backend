@@ -9,4 +9,8 @@ const subscriptionPurchaseValidationSchema = z.object({
     }),
 });
 
-export { subscriptionPurchaseValidationSchema };
+const SubscriptionPurchaseValidations = {
+    subscriptionPurchaseValidationSchema,
+};
+
+export default SubscriptionPurchaseValidations;

@@ -1,25 +1,19 @@
-import express from "express";
-import auth from "../../middlewares/auth";
-import { USER_ROLE } from "../user/user.constant";
-import validateRequest from "../../middlewares/validateRequest";
-import subscription-purchaseValidations from "./subscription-purchase.validation";
-import subscription-purchaseController from "./subscription-purchase.controller";
-import { uploadFile } from "../../helper/fileUploader";
+import express from 'express';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constant';
+import validateRequest from '../../middlewares/validateRequest';
+import SubscriptionPurchaseController from './subscription-purchase.controller';
+import SubscriptionPurchaseValidations from './subscription-purchase.validation';
 
 const router = express.Router();
 
-router.patch(
-    "/update-profile",
+router.post(
+    '/purchase/:id',
     auth(USER_ROLE.user),
-    uploadFile(),
-    (req, res, next) => {
-        if (req.body.data) {
-            req.body = JSON.parse(req.body.data);
-        }
-        next();
-    },
-    validateRequest(subscription-purchaseValidations.updateSubscription-purchaseData),
-    subscription-purchaseController.updateUserProfile
+    validateRequest(
+        SubscriptionPurchaseValidations.subscriptionPurchaseValidationSchema
+    ),
+    SubscriptionPurchaseController.purchaseSubscription
 );
 
-export const subscription-purchaseRoutes = router;
+export const subscriptionPurchaseRoutes = router;
