@@ -14,14 +14,16 @@ const auth = (...requiredRoles: TUserRole[]) => {
     return catchAsync(
         async (req: Request, res: Response, next: NextFunction) => {
             // check if the token is sent from client -----
-            const token = req?.headers?.authorization;
+            let token = req?.headers?.authorization;
             if (!token) {
                 throw new AppError(
                     httpStatus.UNAUTHORIZED,
                     'Your are not authorized 1'
                 );
             }
-
+            if (token.startsWith('Bearer ')) {
+                token = token.slice(7);
+            }
             let decoded;
 
             try {

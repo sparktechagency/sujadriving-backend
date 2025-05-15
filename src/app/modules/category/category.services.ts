@@ -8,6 +8,19 @@ import QueryBuilder from '../../builder/QueryBuilder';
 
 // create category into db
 const createCategoryIntoDB = async (payload: ICategory) => {
+    const category = await Category.findOne({
+        name: payload.name,
+        testType: payload.testType,
+    });
+    if (category) {
+        if (payload.category_image) {
+            deleteCategoryFromDB(payload.category_image);
+        }
+        throw new AppError(
+            httpStatus.BAD_REQUEST,
+            `This category already exist for ${payload.testType}`
+        );
+    }
     const result = await Category.create(payload);
     return result;
 };
@@ -74,6 +87,8 @@ const deleteCategoryFromDB = async (categoryId: string) => {
             categoryId,
             { isDeleted: true },
             {
+                new: true,
+
                 session,
             }
         );

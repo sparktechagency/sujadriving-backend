@@ -4,11 +4,15 @@ import { ITopic } from './topic.interface';
 import Category from '../category/category.model';
 import { Topic } from './topic.model';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { deleteFileFromS3 } from '../../helper/deleteFromS3';
 
 // Create Topic
 const createTopic = async (payload: ITopic) => {
     const category = await Category.findById(payload.category);
     if (!category) {
+        if (payload.topic_icon) {
+            deleteFileFromS3(payload.topic_icon);
+        }
         throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
     }
 
@@ -18,7 +22,10 @@ const createTopic = async (payload: ITopic) => {
 
 // Get All Topics
 const getAllTopics = async (query: Record<string, unknown>) => {
-    const topicQuery = new QueryBuilder(Topic.find(), query)
+    const topicQuery = new QueryBuilder(
+        Topic.find({ isDeleted: false }).populate('category'),
+        query
+    )
         .search(['name'])
         .fields()
         .filter()
@@ -35,7 +42,7 @@ const getAllTopics = async (query: Record<string, unknown>) => {
 
 // Get Topic by ID
 const getTopicById = async (topicId: string) => {
-    const topic = await Topic.findById(topicId).populate('category', 'name');
+    const topic = await Topic.findById(topicId).populate('category');
     if (!topic) {
         throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
     }
@@ -50,6 +57,10 @@ const updateTopic = async (topicId: string, payload: ITopic) => {
             throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
         }
     }
+    const topic = await Topic.findById(topicId);
+    if (!topic) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
+    }
 
     const updatedTopic = await Topic.findByIdAndUpdate(
         topicId,
@@ -57,8 +68,8 @@ const updateTopic = async (topicId: string, payload: ITopic) => {
         { new: true }
     );
 
-    if (!updatedTopic) {
-        throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
+    if (payload.topic_icon && topic.topic_icon) {
+        deleteFileFromS3(topic.topic_icon);
     }
 
     return updatedTopic;
@@ -66,15 +77,17 @@ const updateTopic = async (topicId: string, payload: ITopic) => {
 
 // Delete Topic
 const deleteTopic = async (topicId: string) => {
-    const deletedTopic = await Topic.findByIdAndUpdate(
+    const topic = await Topic.findById(topicId);
+    if (!topic) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
+    }
+    const result = await Topic.findByIdAndUpdate(
         topicId,
         { isDeleted: true },
         { new: true, runValidators: true }
     );
-    if (!deletedTopic) {
-        throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
-    }
-    return deleteTopic;
+
+    return result;
 };
 
 const TopicServices = {

@@ -24,7 +24,7 @@ export const uploadFile = () => {
         const allowedFieldnames = [
             'image',
             'profile_image',
-            'league_image',
+            'topic_icon',
             'category_image',
             'team_logo',
             'team_bg_image',
@@ -86,8 +86,8 @@ export const uploadFile = () => {
                 uploadPath = 'uploads/images/category';
             } else if (file.fieldname === 'video') {
                 uploadPath = 'uploads/videos';
-            } else if (file.fieldname === 'product_image') {
-                uploadPath = 'uploads/images/product_image';
+            } else if (file.fieldname === 'topic_icon') {
+                uploadPath = 'uploads/images/topic_icon';
             } else if (file.fieldname === 'chat_images') {
                 uploadPath = 'uploads/images/chat_image';
             } else if (file.fieldname === 'chat_videos') {
@@ -143,7 +143,7 @@ export const uploadFile = () => {
         { name: 'video', maxCount: 5 },
         { name: 'chat_videos', maxCount: 2 },
         { name: 'chat_images', maxCount: 7 },
-        { name: 'product_image', maxCount: 7 },
+        { name: 'topic_icon', maxCount: 1 },
     ]);
 
     return upload;

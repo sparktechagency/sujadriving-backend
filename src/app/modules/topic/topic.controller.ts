@@ -1,10 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
 import catchAsync from '../../utilities/catchasync';
 import sendResponse from '../../utilities/sendResponse';
 import TopicServices from './topic.service';
+import { getCloudFrontUrl } from '../../helper/mutler-s3-uploader';
 
 // Create Topic
 const createTopic = catchAsync(async (req, res) => {
+    const file: any = req.files?.topic_icon;
+    if (req.files?.topic_icon) {
+        req.body.topic_icon = getCloudFrontUrl(file[0].key);
+    }
     const result = await TopicServices.createTopic(req.body);
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
@@ -39,6 +45,10 @@ const getTopicById = catchAsync(async (req, res) => {
 
 // Update Topic
 const updateTopic = catchAsync(async (req, res) => {
+    const file: any = req.files?.topic_icon;
+    if (req.files?.topic_icon) {
+        req.body.topic_icon = getCloudFrontUrl(file[0].key);
+    }
     const { topicId } = req.params;
     const result = await TopicServices.updateTopic(topicId, req.body);
     sendResponse(res, {

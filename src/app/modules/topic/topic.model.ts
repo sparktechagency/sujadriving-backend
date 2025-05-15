@@ -8,6 +8,10 @@ const TopicSchema = new Schema<ITopic>(
             required: true,
             ref: 'Category',
         },
+        topic_icon: {
+            type: String,
+            required: true,
+        },
         name: { type: String, required: true },
         isDeleted: {
             type: Boolean,
