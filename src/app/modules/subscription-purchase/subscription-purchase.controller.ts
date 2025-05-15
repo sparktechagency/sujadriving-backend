@@ -11,10 +11,24 @@ const purchaseSubscription = catchAsync(async (req, res) => {
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Profile updated successfully',
+        message: 'Payment url created for purchase subscription',
+        data: result,
+    });
+});
+const getAllSubscriptionPurchase = catchAsync(async (req, res) => {
+    const result = await SubscriptionPurchaseService.getAllSubscriptionPurchase(
+        req.query
+    );
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Purchased subscriptions retrieved successfully',
         data: result,
     });
 });
 
-const SubscriptionPurchaseController = { purchaseSubscription };
+const SubscriptionPurchaseController = {
+    purchaseSubscription,
+    getAllSubscriptionPurchase,
+};
 export default SubscriptionPurchaseController;
