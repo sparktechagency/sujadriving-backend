@@ -10,6 +10,13 @@ const createQuestion = async (payload: IQuestion) => {
     if (!topic) {
         throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
     }
+
+    if (!payload.options.includes(payload.answer)) {
+        throw new AppError(
+            httpStatus.BAD_REQUEST,
+            'The provided answer is not include in options'
+        );
+    }
     const result = await Question.create(payload);
     return result;
 };
@@ -45,6 +52,35 @@ const updateQuestion = async (id: string, payload: IQuestion) => {
             throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
         }
     }
+
+    const question = await Question.findById(id);
+    if (!question) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Question not found');
+    }
+
+    let options;
+    if (payload.options) {
+        options = payload.options;
+    } else {
+        options = question.options;
+    }
+
+    if (payload.answer) {
+        if (!options.includes(payload.answer)) {
+            throw new AppError(
+                httpStatus.BAD_REQUEST,
+                'The provided answer is not include in options'
+            );
+        }
+    } else {
+        if (!options.includes(question.answer)) {
+            throw new AppError(
+                httpStatus.BAD_REQUEST,
+                'The provided answer is not include in options'
+            );
+        }
+    }
+
     const updatedQuestion = await Question.findByIdAndUpdate(id, payload, {
         new: true,
     });

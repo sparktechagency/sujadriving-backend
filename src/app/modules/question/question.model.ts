@@ -24,7 +24,6 @@ const questionSchema: Schema = new Schema(
         },
         explanation: {
             type: String,
-            // required: true,
         },
     },
     {

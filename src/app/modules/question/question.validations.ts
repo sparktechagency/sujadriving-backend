@@ -2,11 +2,9 @@ import { z } from 'zod';
 
 const createQuestionValidationSchema = z.object({
     body: z.object({
-        topic: z.string().uuid(),
+        topic: z.string(),
         question: z.string().min(1, 'Question is required'),
-        options: z
-            .array(z.string())
-            .length(2, 'Options array must have exactly 2 elements'),
+        options: z.array(z.string()),
         answer: z.string().min(1, 'Answer is required'),
         explanation: z.string().optional(),
     }),
@@ -14,12 +12,9 @@ const createQuestionValidationSchema = z.object({
 
 const updateQuestionValidationSchema = z.object({
     body: z.object({
-        topic: z.string().uuid().optional(),
+        topic: z.string().optional(),
         question: z.string().min(1, 'Question is required').optional(),
-        options: z
-            .array(z.string())
-            .length(2, 'Options array must have exactly 2 elements')
-            .optional(),
+        options: z.array(z.string()).optional(),
         answer: z.string().min(1, 'Answer is required').optional(),
         explanation: z.string().optional(),
     }),

@@ -24,14 +24,14 @@ router.get(
 
 // Get Single Question by ID
 router.get(
-    'get-single/:id',
+    '/get-single/:id',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.user),
     QuestionController.getSingleQuestion
 );
 
 // Update Question
-router.put(
-    'update-question/:id',
+router.patch(
+    '/update-question/:id',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     validateRequest(QuestionValidations.updateQuestionValidationSchema),
     QuestionController.updateQuestion
@@ -39,7 +39,7 @@ router.put(
 
 // Delete Question----
 router.delete(
-    'delete-question/:id',
+    '/delete-question/:id',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     QuestionController.deleteQuestion
 );
