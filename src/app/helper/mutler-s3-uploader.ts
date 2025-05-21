@@ -149,6 +149,7 @@ export const uploadFile = () => {
     return upload;
 };
 
+// get cloud font url
 export const getCloudFrontUrl = (s3FilePath: string): string => {
     return `${process.env.CLOUDFRONT_URL}/${s3FilePath}`;
 };
