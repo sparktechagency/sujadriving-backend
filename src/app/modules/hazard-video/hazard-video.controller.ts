@@ -3,11 +3,15 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utilities/catchasync';
 import sendResponse from '../../utilities/sendResponse';
 import HazardVideoService from './hazard-video.service';
+import { getCloudFrontUrl } from '../../helper/mutler-s3-uploader';
 
 // Create a new HazardVideo
 const createHazardVideo = catchAsync(async (req, res) => {
-    const payload = req.body;
-    const result = await HazardVideoService.createHazardVideo(payload);
+    const file: any = req.files?.video;
+    if (req.files?.video) {
+        req.body.video_url = getCloudFrontUrl(file[0].key);
+    }
+    const result = await HazardVideoService.createHazardVideo(req.body);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
@@ -44,8 +48,11 @@ const getHazardVideoById = catchAsync(async (req, res) => {
 // Update a HazardVideo by ID
 const updateHazardVideo = catchAsync(async (req, res) => {
     const { id } = req.params;
-    const payload = req.body;
-    const result = await HazardVideoService.updateHazardVideo(id, payload);
+    const file: any = req.files?.video;
+    if (req.files?.video) {
+        req.body.video_url = getCloudFrontUrl(file[0].key);
+    }
+    const result = await HazardVideoService.updateHazardVideo(id, req.body);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,

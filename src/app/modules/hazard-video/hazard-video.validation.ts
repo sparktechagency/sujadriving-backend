@@ -6,9 +6,6 @@ const createHazardVideoValidationSchema = z.object({
         hazardTopic: z.string().refine((val) => Types.ObjectId.isValid(val), {
             message: 'Invalid ObjectId format',
         }),
-        video_url: z.string().url({
-            message: 'Invalid URL format',
-        }),
         dangerTimes: z.array(z.number()).min(1, {
             message: 'At least one danger time is required',
         }),
@@ -19,9 +16,6 @@ const updateHazardVideoValidationSchema = z.object({
     body: z.object({
         hazardTopic: z.string().refine((val) => Types.ObjectId.isValid(val), {
             message: 'Invalid ObjectId format',
-        }),
-        video_url: z.string().url({
-            message: 'Invalid URL format',
         }),
         dangerTimes: z.array(z.number()).min(1, {
             message: 'At least one danger time is required',
