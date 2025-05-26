@@ -16,6 +16,7 @@ import { highwaySignRoutes } from '../modules/highway-sign/highway-sign.routes';
 import { hazardVideoRoutes } from '../modules/hazard-video/hazard-video.routes';
 import { subscriptionRoutes } from '../modules/subscription/subscription.routes';
 import { subscriptionPurchaseRoutes } from '../modules/subscription-purchase/subscription-purchase.routes';
+import { hazardTopicRoutes } from '../modules/hazard-topic/hazard-topic.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -87,6 +88,10 @@ const moduleRoutes = [
     {
         path: '/hazard-video',
         router: hazardVideoRoutes,
+    },
+    {
+        path: '/hazard-topic',
+        router: hazardTopicRoutes,
     },
     {
         path: '/subscription',

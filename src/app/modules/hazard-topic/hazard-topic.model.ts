@@ -5,6 +5,7 @@ const hazardTopicSchema = new Schema<IHazardTopic>({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     topic_icon: {
         type: String,

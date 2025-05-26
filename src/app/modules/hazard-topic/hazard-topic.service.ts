@@ -4,6 +4,7 @@ import { IHazardTopic } from './hazard-topic.interface';
 import HazardTopic from './hazard-topic.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { deleteFileFromS3 } from '../../helper/deleteFromS3';
+import HazardVideo from '../hazard-video/hazard-video.model';
 
 // Create a new HazardTopic
 const createHazardTopic = async (payload: IHazardTopic) => {
@@ -71,6 +72,10 @@ const deleteHazardTopic = async (id: string) => {
     if (!result) {
         throw new AppError(httpStatus.NOT_FOUND, 'HazardTopic not found');
     }
+
+    const videos = await HazardVideo.find({ hazardTopic: id });
+    await Promise.all(videos.map((video) => deleteFileFromS3(video.video_url)));
+    await HazardVideo.deleteMany({ hazardTopic: id });
 
     if (result.topic_icon) {
         deleteFileFromS3(result.topic_icon);
