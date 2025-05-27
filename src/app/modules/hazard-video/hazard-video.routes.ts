@@ -11,7 +11,7 @@ const router = express.Router();
 // Create Hazard Video
 router.post(
     '/create',
-    auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin, USER_ROLE.superAdmin),
     uploadFile(),
     (req: Request, res: Response, next: NextFunction) => {
         if (req.body.data) {
@@ -26,21 +26,22 @@ router.post(
 // Get All Hazard Videos
 router.get(
     '/get-all',
-    auth(USER_ROLE.user),
+    auth(USER_ROLE.user, USER_ROLE.superAdmin, USER_ROLE.admin),
     hazardVideoController.getAllHazardVideos
 );
 
 // Get Single Hazard Video
 router.get(
-    'get-single/:id',
-    auth(USER_ROLE.user),
+    '/get-single/:id',
+    auth(USER_ROLE.user, USER_ROLE.superAdmin, USER_ROLE.admin),
+
     hazardVideoController.getHazardVideoById
 );
 
 // Update Hazard Video
 router.patch(
-    'update/:id',
-    auth(USER_ROLE.admin),
+    '/update/:id',
+    auth(USER_ROLE.admin, USER_ROLE.superAdmin),
     uploadFile(),
     (req: Request, res: Response, next: NextFunction) => {
         if (req.body.data) {
@@ -54,8 +55,8 @@ router.patch(
 
 // Delete Hazard Video
 router.delete(
-    'delete/:id',
-    auth(USER_ROLE.admin),
+    '/delete/:id',
+    auth(USER_ROLE.admin, USER_ROLE.superAdmin),
     hazardVideoController.deleteHazardVideo
 );
 

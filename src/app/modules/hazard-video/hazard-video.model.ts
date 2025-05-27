@@ -12,8 +12,8 @@ const hazardVideoSchema = new Schema<IHazardVideo>({
         required: true,
     },
     dangerTimes: {
-        Type: [Number],
-        // required: true,
+        type: [Number],
+        required: true,
     },
 });
 
