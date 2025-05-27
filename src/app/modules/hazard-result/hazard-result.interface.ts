@@ -1,8 +1,9 @@
 import { Types } from 'mongoose';
 
-export interface IHazardTest {
+export interface IHazardResult {
     user: Types.ObjectId;
     video: Types.ObjectId;
+    topic: Types.ObjectId;
     rightSubmission: number;
     wrongSubmission: number;
     accuracy: number;

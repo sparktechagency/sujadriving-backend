@@ -1,7 +1,9 @@
 import httpStatus from 'http-status';
 import AppError from '../../error/appError';
 import HazardVideo from '../hazard-video/hazard-video.model';
-import { IHazardTest } from './hazard-test.interface';
+import { IHazardResult } from './hazard-result.interface';
+import QueryBuilder from '../../builder/QueryBuilder';
+import HazardResult from './hazard-result.model';
 
 function minuteSecondToSeconds(time: number): number {
     const minutes = Math.floor(time); // integer part = minutes
@@ -9,9 +11,9 @@ function minuteSecondToSeconds(time: number): number {
     return minutes * 60 + seconds;
 }
 
-const createHazardTestResult = async (
+const createHazardResultResult = async (
     profileId: string,
-    payload: IHazardTest & { submissions: number[] }
+    payload: IHazardResult & { submissions: number[] }
 ) => {
     const video = await HazardVideo.findById(payload.video);
     if (!video) {
@@ -48,8 +50,46 @@ const createHazardTestResult = async (
     };
 };
 
-const HazardTestService = {
-    createHazardTestResult,
+const getAllHazardResultResult = async (query: Record<string, unknown>) => {
+    const resultQuery = new QueryBuilder(HazardResult.find(), query)
+        .search([''])
+        .fields()
+        .filter()
+        .paginate()
+        .sort();
+    const result = await resultQuery.modelQuery;
+    const meta = await resultQuery.countTotal();
+    return {
+        meta,
+        result,
+    };
 };
 
-export default HazardTestService;
+const getMyHazardResults = async (
+    profileId: string,
+    query: Record<string, unknown>
+) => {
+    const resultQuery = new QueryBuilder(
+        HazardResult.find({ user: profileId }),
+        query
+    )
+        .search([''])
+        .fields()
+        .filter()
+        .paginate()
+        .sort();
+    const result = await resultQuery.modelQuery;
+    const meta = await resultQuery.countTotal();
+    return {
+        meta,
+        result,
+    };
+};
+
+const HazardResultService = {
+    createHazardResultResult,
+    getAllHazardResultResult,
+    getMyHazardResults,
+};
+
+export default HazardResultService;

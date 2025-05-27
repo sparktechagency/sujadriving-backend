@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { IHazardTest } from './hazard-test.interface';
+import { IHazardResult } from './hazard-result.interface';
 
-const hazardTestSchema = new Schema<IHazardTest>({
+const HazardResultSchema = new Schema<IHazardResult>({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'NormalUser',
@@ -10,6 +10,10 @@ const hazardTestSchema = new Schema<IHazardTest>({
     video: {
         type: Schema.Types.ObjectId,
         ref: 'HazardVideo',
+        required: true,
+    },
+    topic: {
+        type: Schema.Types.ObjectId,
         required: true,
     },
     rightSubmission: {
@@ -33,6 +37,6 @@ const hazardTestSchema = new Schema<IHazardTest>({
     },
 });
 
-const HazardTest = model<IHazardTest>('HazardTest', hazardTestSchema);
+const HazardResult = model<IHazardResult>('HazardResult', HazardResultSchema);
 
-export default HazardTest;
+export default HazardResult;

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const hazardTestValidaitonSchema = z.object({
+const HazardResultValidaitonSchema = z.object({
     body: z.object({
         video: z.string({ required_error: 'Video id is required' }),
         submissions: z.array(z.number(), {
@@ -9,8 +9,8 @@ const hazardTestValidaitonSchema = z.object({
     }),
 });
 
-const HazardTestValidations = {
-    hazardTestValidaitonSchema,
+const HazardResultValidations = {
+    HazardResultValidaitonSchema,
 };
 
-export default HazardTestValidations;
+export default HazardResultValidations;
