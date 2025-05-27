@@ -1,11 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
-import { Types } from 'mongoose';
 import { IQuestion } from './question.interface';
 
-const questionSchema: Schema = new Schema(
+const questionSchema: Schema = new Schema<IQuestion>(
     {
         topic: {
-            type: Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Topic',
             required: true,
         },
@@ -13,6 +12,10 @@ const questionSchema: Schema = new Schema(
             type: String,
             required: true,
             trim: true,
+        },
+        question_image: {
+            type: String,
+            default: '',
         },
         options: {
             type: [String],

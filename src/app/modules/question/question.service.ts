@@ -4,6 +4,7 @@ import { Topic } from '../topic/topic.model';
 import { IQuestion } from './question.interface';
 import Question from './question.model';
 import QueryBuilder from '../../builder/QueryBuilder';
+import { deleteFileFromS3 } from '../../helper/deleteFromS3';
 
 const createQuestion = async (payload: IQuestion) => {
     const topic = await Topic.findById(payload.topic);
@@ -86,6 +87,9 @@ const updateQuestion = async (id: string, payload: IQuestion) => {
     });
     if (!updatedQuestion) {
         throw new AppError(httpStatus.NOT_FOUND, 'Question not found');
+    }
+    if (payload.question_image && question.question_image) {
+        deleteFileFromS3(question.question_image);
     }
     return updatedQuestion;
 };

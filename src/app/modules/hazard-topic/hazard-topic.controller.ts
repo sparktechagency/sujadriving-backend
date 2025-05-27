@@ -68,7 +68,7 @@ const getHazardTopicById = catchAsync(async (req, res) => {
 const deleteHazardTopic = catchAsync(async (req, res) => {
     const result = await HazardTopicService.deleteHazardTopic(req.params.id);
     sendResponse(res, {
-        statusCode: httpStatus.NO_CONTENT,
+        statusCode: httpStatus.OK,
         success: true,
         message: 'Hazard Topic deleted successfully',
         data: result,

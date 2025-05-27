@@ -72,7 +72,6 @@ const deleteHazardTopic = async (id: string) => {
     if (!result) {
         throw new AppError(httpStatus.NOT_FOUND, 'HazardTopic not found');
     }
-
     const videos = await HazardVideo.find({ hazardTopic: id });
     await Promise.all(videos.map((video) => deleteFileFromS3(video.video_url)));
     await HazardVideo.deleteMany({ hazardTopic: id });
