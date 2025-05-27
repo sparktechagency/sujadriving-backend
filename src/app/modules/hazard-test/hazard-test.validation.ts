@@ -1,12 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const updateHazard-testData = z.object({
+const hazardTestValidaitonSchema = z.object({
     body: z.object({
-        name: z.string().optional(),
-        phone: z.string().optional(),
-        address: z.string().optional(),
+        video: z.string({ required_error: 'Video id is required' }),
+        submissions: z.array(z.number(), {
+            required_error: 'Submissions are required',
+        }),
     }),
 });
 
-const Hazard-testValidations = { updateHazard-testData };
-export default Hazard-testValidations;
+const HazardTestValidations = {
+    hazardTestValidaitonSchema,
+};
+
+export default HazardTestValidations;

@@ -1,21 +1,55 @@
-import httpStatus from "http-status";
-import AppError from "../../error/appError";
-import { IHazard-test } from "./hazard-test.interface";
-import hazard-testModel from "./hazard-test.model";
+import httpStatus from 'http-status';
+import AppError from '../../error/appError';
+import HazardVideo from '../hazard-video/hazard-video.model';
+import { IHazardTest } from './hazard-test.interface';
 
-const updateUserProfile = async (id: string, payload: Partial<IHazard-test>) => {
-    if (payload.email || payload.username) {
-        throw new AppError(httpStatus.BAD_REQUEST, "You cannot change the email or username");
+function minuteSecondToSeconds(time: number): number {
+    const minutes = Math.floor(time); // integer part = minutes
+    const seconds = Math.round((time - minutes) * 100); // decimal part * 100 = seconds
+    return minutes * 60 + seconds;
+}
+
+const createHazardTestResult = async (
+    profileId: string,
+    payload: IHazardTest & { submissions: number[] }
+) => {
+    const video = await HazardVideo.findById(payload.video);
+    if (!video) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Video not found');
     }
-    const user = await hazard-testModel.findById(id);
-    if (!user) {
-        throw new AppError(httpStatus.NOT_FOUND, "Profile not found");
+
+    const dangerTimesInSeconds = video.dangerTimes.map(minuteSecondToSeconds);
+    const submissionsInSeconds = payload.submissions.map(minuteSecondToSeconds);
+
+    let rightSubmission = 0;
+    let wrongSubmission = 0;
+
+    for (const submissionSec of submissionsInSeconds) {
+        const isCorrect = dangerTimesInSeconds.some(
+            (dangerSec) => Math.abs(dangerSec - submissionSec) <= 1
+        );
+
+        if (isCorrect) rightSubmission++;
+        else wrongSubmission++;
     }
-    return await hazard-testModel.findByIdAndUpdate(id, payload, {
-        new: true,
-        runValidators: true,
-    });
+
+    const total = submissionsInSeconds.length;
+    const accuracy = total === 0 ? 0 : rightSubmission / total;
+    const accuracyParcentage = accuracy * 100;
+
+    return {
+        user: profileId,
+        video: payload.video,
+        rightSubmission,
+        wrongSubmission,
+        accuracy,
+        totalDangerZone: video.dangerTimes.length,
+        accuracyParcentage,
+    };
 };
 
-const Hazard-testServices = { updateUserProfile };
-export default Hazard-testServices;
+const HazardTestService = {
+    createHazardTestResult,
+};
+
+export default HazardTestService;

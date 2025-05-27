@@ -17,6 +17,7 @@ import { hazardVideoRoutes } from '../modules/hazard-video/hazard-video.routes';
 import { subscriptionRoutes } from '../modules/subscription/subscription.routes';
 import { subscriptionPurchaseRoutes } from '../modules/subscription-purchase/subscription-purchase.routes';
 import { hazardTopicRoutes } from '../modules/hazard-topic/hazard-topic.routes';
+import { hazardTestRoutes } from '../modules/hazard-test/hazard-test.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -100,6 +101,10 @@ const moduleRoutes = [
     {
         path: '/subscription-purchase',
         router: subscriptionPurchaseRoutes,
+    },
+    {
+        path: '/hazard-test',
+        router: hazardTestRoutes,
     },
 ];
 

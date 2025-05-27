@@ -7,4 +7,5 @@ export interface IHazardTest {
     wrongSubmission: number;
     accuracy: number;
     accuracyParcentage: number;
+    totalDangerZone: number[];
 }

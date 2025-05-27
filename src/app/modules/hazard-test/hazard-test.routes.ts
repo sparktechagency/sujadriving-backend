@@ -1,25 +1,18 @@
-import express from "express";
-import auth from "../../middlewares/auth";
-import { USER_ROLE } from "../user/user.constant";
-import validateRequest from "../../middlewares/validateRequest";
-import hazard-testValidations from "./hazard-test.validation";
-import hazard-testController from "./hazard-test.controller";
-import { uploadFile } from "../../helper/fileUploader";
+import express from 'express';
+import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constant';
+import validateRequest from '../../middlewares/validateRequest';
+import HazardTestValidations from './hazard-test.validation';
+import HazardTestController from './hazard-test.controller';
 
 const router = express.Router();
 
 router.patch(
-    "/update-profile",
+    '/update-profile',
     auth(USER_ROLE.user),
-    uploadFile(),
-    (req, res, next) => {
-        if (req.body.data) {
-            req.body = JSON.parse(req.body.data);
-        }
-        next();
-    },
-    validateRequest(hazard-testValidations.updateHazard-testData),
-    hazard-testController.updateUserProfile
+
+    validateRequest(HazardTestValidations.hazardTestValidaitonSchema),
+    HazardTestController.createHazardTestResult
 );
 
-export const hazard-testRoutes = router;
+export const hazardTestRoutes = router;

@@ -28,6 +28,9 @@ const hazardTestSchema = new Schema<IHazardTest>({
         type: Number,
         required: true,
     },
+    totalDangerZone: {
+        type: [Number],
+    },
 });
 
 const HazardTest = model<IHazardTest>('HazardTest', hazardTestSchema);
