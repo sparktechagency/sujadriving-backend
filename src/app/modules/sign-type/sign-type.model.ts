@@ -5,6 +5,7 @@ const categorySchema = new Schema<ISignType>({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     icon: {
         type: String,

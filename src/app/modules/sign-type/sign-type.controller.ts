@@ -68,7 +68,7 @@ const getSignTypeById = catchAsync(async (req, res) => {
 const deleteSignType = catchAsync(async (req, res) => {
     const result = await SignTypeService.deleteSignType(req.params.id);
     sendResponse(res, {
-        statusCode: httpStatus.NO_CONTENT,
+        statusCode: httpStatus.OK,
         success: true,
         message: 'Sign Type deleted successfully',
         data: result,
