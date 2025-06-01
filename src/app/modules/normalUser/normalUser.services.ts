@@ -23,7 +23,10 @@ const updateUserProfile = async (id: string, payload: Partial<INormalUser>) => {
 };
 
 const getAllUser = async (query: Record<string, unknown>) => {
-    const userQuery = new QueryBuilder(NormalUser.find(), query)
+    const userQuery = new QueryBuilder(
+        NormalUser.find().populate({ path: 'user', select: 'isBlocked' }),
+        query
+    )
         .search(['name'])
         .fields()
         .filter()
