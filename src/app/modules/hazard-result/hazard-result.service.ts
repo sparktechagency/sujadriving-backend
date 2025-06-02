@@ -38,8 +38,8 @@ const createHazardResultResult = async (
     const total = submissionsInSeconds.length;
     const accuracy = total === 0 ? 0 : rightSubmission / total;
     const accuracyParcentage = accuracy * 100;
-
-    return {
+    const result = await HazardResult.create({
+        topic: video.hazardTopic,
         user: profileId,
         video: payload.video,
         rightSubmission,
@@ -47,7 +47,8 @@ const createHazardResultResult = async (
         accuracy,
         totalDangerZone: video.dangerTimes.length,
         accuracyParcentage,
-    };
+    });
+    return result;
 };
 
 const getAllHazardResultResult = async (query: Record<string, unknown>) => {

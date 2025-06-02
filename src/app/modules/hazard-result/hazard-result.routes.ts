@@ -16,7 +16,7 @@ router.post(
 );
 router.get(
     '/get-all',
-    auth(USER_ROLE.user, USER_ROLE.superAdmin, USER_ROLE.admin),
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     HazardResultController.getAllHazardResultResult
 );
 router.get(

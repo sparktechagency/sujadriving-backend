@@ -91,6 +91,10 @@ const moduleRoutes = [
         router: hazardVideoRoutes,
     },
     {
+        path: '/hazard-result',
+        router: hazardResultRoutes,
+    },
+    {
         path: '/hazard-topic',
         router: hazardTopicRoutes,
     },
