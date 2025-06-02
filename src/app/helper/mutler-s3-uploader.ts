@@ -36,7 +36,7 @@ export const uploadFile = () => {
             'chat_images',
             'chat_videos',
             'product_image',
-            'course_banner',
+            'sign_image',
             'banner',
             'class_banner',
             'icon',
@@ -101,8 +101,8 @@ export const uploadFile = () => {
                 uploadPath = 'uploads/images/player_image';
             } else if (file.fieldname === 'class_banner') {
                 uploadPath = 'uploads/images/class_banner';
-            } else if (file.fieldname === 'course_banner') {
-                uploadPath = 'uploads/images/course_banner';
+            } else if (file.fieldname === 'sign_image') {
+                uploadPath = 'uploads/images/highway_sign_image';
             } else if (file.fieldname === 'icon') {
                 uploadPath = 'uploads/images/sign_icon';
             } else {
@@ -142,7 +142,7 @@ export const uploadFile = () => {
         { name: 'banner', maxCount: 1 },
         { name: 'course_banner', maxCount: 1 },
         { name: 'video', maxCount: 5 },
-        { name: 'chat_videos', maxCount: 2 },
+        { name: 'sign_image', maxCount: 1 },
         { name: 'chat_images', maxCount: 7 },
         { name: 'topic_icon', maxCount: 1 },
         { name: 'icon', maxCount: 1 },

@@ -4,16 +4,24 @@ import { IHighwaySign } from './highway-sign.interface';
 import HighwaySign from './highway-sign.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { deleteFileFromS3 } from '../../helper/deleteFromS3';
+import SignType from '../sign-type/sign-type.model';
 
 // Create a new HighwaySign
 const createHighwaySign = async (payload: IHighwaySign) => {
+    const signType = await SignType.findById(payload.signType);
+    if (!signType) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Sign type not found');
+    }
     const result = await HighwaySign.create(payload);
     return result;
 };
 
 // Get all HighwaySigns
 const getAllHighwaySigns = async (query: Record<string, unknown>) => {
-    const highwaySignQuery = new QueryBuilder(HighwaySign.find(), query)
+    const highwaySignQuery = new QueryBuilder(
+        HighwaySign.find().populate('signType'),
+        query
+    )
         .search(['description'])
         .fields()
         .filter()

@@ -68,7 +68,7 @@ const getHighwaySignById = catchAsync(async (req, res) => {
 const deleteHighwaySign = catchAsync(async (req, res) => {
     const result = await HighwaySignService.deleteHighwaySign(req.params.id);
     sendResponse(res, {
-        statusCode: httpStatus.NO_CONTENT,
+        statusCode: httpStatus.OK,
         success: true,
         message: 'Highway Sign deleted successfully',
         data: result,
