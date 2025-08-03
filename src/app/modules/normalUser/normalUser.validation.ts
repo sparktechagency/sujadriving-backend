@@ -10,10 +10,12 @@ export const createNormalUserSchema = z.object({
             .string({ required_error: 'Confirm password is required' })
             .min(6, { message: 'Password must be 6 character' }),
 
-        name: z.string({
-            required_error: 'Name is required',
-            invalid_type_error: 'Name must be a string',
-        }),
+        name: z
+            .string({
+                required_error: 'Name is required',
+                invalid_type_error: 'Name must be a string',
+            })
+            .optional(),
         email: z.string().email('Invalid email format'),
         phone: z.string().optional(),
         gender: z
@@ -25,8 +27,13 @@ export const createNormalUserSchema = z.object({
 });
 export const updateNormalUserData = z.object({
     body: z.object({
-        firstName: z.string().optional(),
-        lastName: z.string().optional(),
+        name: z
+            .string({
+                required_error: 'Name is required',
+                invalid_type_error: 'Name must be a string',
+            })
+            .optional(),
+        email: z.string().email('Invalid email format').optional(),
         phone: z.string().optional(),
         gender: z
             .enum(Object.values(ENUM_GENDER) as [string, ...string[]])

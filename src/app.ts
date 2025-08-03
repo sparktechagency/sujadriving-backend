@@ -45,7 +45,7 @@ app.use('/', router);
 app.post('/contact-us', sendContactUsEmail);
 
 app.get('/', async (req, res) => {
-    res.send({ message: 'Welcome to dance club server' });
+    res.send({ message: 'Welcome to suja driving' });
 });
 
 // global error handler

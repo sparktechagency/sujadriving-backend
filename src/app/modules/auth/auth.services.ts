@@ -321,7 +321,7 @@ const forgetPassword = async (email: string) => {
 
 // verify forgot otp
 
-const verifyResetOtp = async (email: string, resetCode: number) => {
+const verifyResetOtp = async (email: string, verifyCode: number) => {
     const user = await User.findOne({ email: email });
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, 'This user does not exist');
@@ -339,7 +339,7 @@ const verifyResetOtp = async (email: string, resetCode: number) => {
     if (user.codeExpireIn < new Date(Date.now())) {
         throw new AppError(httpStatus.BAD_REQUEST, 'Reset code is expire');
     }
-    if (user.resetCode !== Number(resetCode)) {
+    if (user.resetCode !== Number(verifyCode)) {
         throw new AppError(httpStatus.BAD_REQUEST, 'Reset code is invalid');
     }
     await User.findOneAndUpdate(
