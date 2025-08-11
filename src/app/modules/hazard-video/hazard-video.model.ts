@@ -11,6 +11,10 @@ const hazardVideoSchema = new Schema<IHazardVideo>({
         type: String,
         required: true,
     },
+    thumbnail_url: {
+        type: String,
+        required: true,
+    },
     dangerTimes: {
         type: [Number],
         required: true,

@@ -193,6 +193,7 @@ cron.schedule('*/2 * * * *', async () => {
     try {
         const now = new Date();
 
+        console.log('Trying to delete expired users and associated data...');
         // Find unverified users whose expiration time has passed
         const expiredUsers = await User.find({
             isVerified: false,

@@ -11,6 +11,10 @@ const createHazardVideo = catchAsync(async (req, res) => {
     if (req.files?.video) {
         req.body.video_url = getCloudFrontUrl(file[0].key);
     }
+    if (req.files?.thumbnail) {
+        const thumbnail: any = req.files.thumbnail;
+        req.body.thumbnail_url = getCloudFrontUrl(thumbnail[0].key);
+    }
     const result = await HazardVideoService.createHazardVideo(req.body);
 
     sendResponse(res, {

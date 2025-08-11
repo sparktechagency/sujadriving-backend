@@ -40,6 +40,7 @@ export const uploadFile = () => {
             'banner',
             'class_banner',
             'icon',
+            'thumbnail',
         ];
 
         if (file.fieldname === undefined) {
@@ -76,6 +77,9 @@ export const uploadFile = () => {
         s3: s3,
         bucket: process.env.AWS_S3_BUCKET_NAME || 'your-bucket-name',
         contentType: multerS3.AUTO_CONTENT_TYPE,
+        contentDisposition: (req, file, cb) => {
+            cb(null, 'inline'); // ✅ forces inline playback
+        },
         // Removing ACL setting as your bucket doesn't support ACLs
         key: function (req, file, cb) {
             let uploadPath = '';
@@ -105,6 +109,8 @@ export const uploadFile = () => {
                 uploadPath = 'uploads/images/highway_sign_image';
             } else if (file.fieldname === 'icon') {
                 uploadPath = 'uploads/images/sign_icon';
+            } else if (file.fieldname === 'thumbnail') {
+                uploadPath = 'uploads/images/thumbnails';
             } else {
                 uploadPath = 'uploads';
             }
@@ -146,6 +152,7 @@ export const uploadFile = () => {
         { name: 'chat_images', maxCount: 7 },
         { name: 'topic_icon', maxCount: 1 },
         { name: 'icon', maxCount: 1 },
+        { name: 'thumbnail', maxCount: 1 },
     ]);
 
     return upload;
