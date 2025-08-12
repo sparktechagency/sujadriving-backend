@@ -9,6 +9,11 @@ const resultSchema = new Schema<IResult>(
             required: true,
         },
         topic: { type: Schema.Types.ObjectId, ref: 'Topic', required: true },
+        category: {
+            type: Schema.Types.ObjectId,
+            ref: 'Category',
+            required: true,
+        },
         totalQuestions: { type: Number, required: true },
         correctAnswers: { type: Number, required: true },
         wrongAnswers: { type: Number, required: true },

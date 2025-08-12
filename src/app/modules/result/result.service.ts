@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import AppError from '../../error/appError';
 import Question from '../question/question.model';
+import { Topic } from '../topic/topic.model';
 import { Result } from './result.model';
+import httpStatus from 'http-status';
 
 const submitQuiz = async (profileId: string, payload: any) => {
     const { topicId, answers } = payload;
-
+    const topic = await Topic.findById(topicId);
+    if (!topic) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
+    }
     // Fetch all questions for that topic
     const questions = await Question.find({ topic: topicId });
 
@@ -34,6 +41,7 @@ const submitQuiz = async (profileId: string, payload: any) => {
         wrongAnswers: wrong,
         accuracy,
         score,
+        category: topic.category,
     });
 
     return result;
