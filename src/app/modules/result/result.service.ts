@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { profile } from 'winston';
 import AppError from '../../error/appError';
 import Question from '../question/question.model';
 import { Topic } from '../topic/topic.model';
@@ -47,5 +48,21 @@ const submitQuiz = async (profileId: string, payload: any) => {
     return result;
 };
 
-const ResultServices = { submitQuiz };
+const getAllResultFromDB = async () => {
+    const results = await Result.find()
+        .populate('user', 'name email')
+        .populate('topic', 'name')
+        .populate('category', 'name');
+    return results;
+};
+
+const getMyResultFromDB = async (profileId: string) => {
+    const results = await Result.find({ user: profileId })
+        .populate('user', 'name email')
+        .populate('topic', 'name')
+        .populate('category', 'name');
+    return results;
+};
+
+const ResultServices = { submitQuiz, getAllResultFromDB, getMyResultFromDB };
 export default ResultServices;
