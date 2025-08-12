@@ -13,5 +13,16 @@ router.post(
     validateRequest(ResultValidations.quizSubmissionSchema),
     resultController.submitQuiz
 );
+router.get(
+    '/get-all-results',
+    auth(USER_ROLE.user, USER_ROLE.superAdmin),
+    resultController.getAllResult
+);
+
+router.get(
+    '/get-my-results',
+    auth(USER_ROLE.user),
+    resultController.getMyResults
+);
 
 export const resultRoutes = router;

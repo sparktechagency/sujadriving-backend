@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { profile } from 'winston';
 import AppError from '../../error/appError';
 import Question from '../question/question.model';
 import { Topic } from '../topic/topic.model';

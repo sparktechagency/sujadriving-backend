@@ -15,6 +15,24 @@ const submitQuiz = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const getAllResult = catchAsync(async (req, res) => {
+    const result = await resultServices.getAllResultFromDB();
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'All results retrieved successfully',
+        data: result,
+    });
+});
+const getMyResults = catchAsync(async (req, res) => {
+    const result = await resultServices.getMyResultFromDB(req.user.profileId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Your results retrieved successfully',
+        data: result,
+    });
+});
 
-const ResultController = { submitQuiz };
+const ResultController = { submitQuiz, getAllResult, getMyResults };
 export default ResultController;

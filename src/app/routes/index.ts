@@ -18,6 +18,7 @@ import { subscriptionRoutes } from '../modules/subscription/subscription.routes'
 import { subscriptionPurchaseRoutes } from '../modules/subscription-purchase/subscription-purchase.routes';
 import { hazardTopicRoutes } from '../modules/hazard-topic/hazard-topic.routes';
 import { hazardResultRoutes } from '../modules/hazard-result/hazard-result.routes';
+import { resultRoutes } from '../modules/result/result.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -93,6 +94,10 @@ const moduleRoutes = [
     {
         path: '/hazard-result',
         router: hazardResultRoutes,
+    },
+    {
+        path: '/result',
+        router: resultRoutes,
     },
     {
         path: '/hazard-topic',

@@ -18,7 +18,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
             if (!token) {
                 throw new AppError(
                     httpStatus.UNAUTHORIZED,
-                    'Your are not authorized 1'
+                    'You are not authorized 1'
                 );
             }
             if (token.startsWith('Bearer ')) {
@@ -80,7 +80,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
             if (requiredRoles && !requiredRoles.includes(role)) {
                 throw new AppError(
                     httpStatus.UNAUTHORIZED,
-                    'Your are not authorized 3'
+                    'You are not authorized 3'
                 );
             }
             // add those properties in req
