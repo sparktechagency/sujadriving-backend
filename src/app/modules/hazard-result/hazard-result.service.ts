@@ -22,6 +22,8 @@ const createHazardResultResult = async (
 
     const dangerTimesInSeconds = video.dangerTimes.map(minuteSecondToSeconds);
     const submissionsInSeconds = payload.submissions.map(minuteSecondToSeconds);
+    console.log('danger times in second', dangerTimesInSeconds);
+    console.log('submission in seconds', submissionsInSeconds);
 
     let rightSubmission = 0;
     let wrongSubmission = 0;
