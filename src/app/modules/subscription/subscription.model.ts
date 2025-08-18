@@ -1,11 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 import { ISubscription } from './subscription.interface';
+import { ENUM_SUBSCRIPTION_TYPE } from './subscription.enum';
 
-const subscriptionSchema: Schema = new Schema(
+const subscriptionSchema: Schema = new Schema<ISubscription>(
     {
+        title: {
+            type: String,
+            required: true,
+        },
         type: {
             type: String,
             required: true,
+            enum: Object.values(ENUM_SUBSCRIPTION_TYPE),
         },
         price: {
             type: Number,
