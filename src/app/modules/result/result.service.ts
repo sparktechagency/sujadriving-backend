@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../error/appError';
+import Category from '../category/category.model';
 import Question from '../question/question.model';
 import { Topic } from '../topic/topic.model';
 import { Result } from './result.model';
@@ -12,6 +14,11 @@ const submitQuiz = async (profileId: string, payload: any) => {
     if (!topic) {
         throw new AppError(httpStatus.NOT_FOUND, 'Topic not found');
     }
+    const category = await Category.findById(topic?.category);
+    if (!category) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Category not found');
+    }
+
     // Fetch all questions for that topic
     const questions = await Question.find({ topic: topicId });
 
@@ -42,25 +49,57 @@ const submitQuiz = async (profileId: string, payload: any) => {
         accuracy,
         score,
         category: topic.category,
+        testType: category.testType,
     });
 
     return result;
 };
 
-const getAllResultFromDB = async () => {
-    const results = await Result.find()
-        .populate('user', 'name email')
-        .populate('topic', 'name')
-        .populate('category', 'name');
-    return results;
+const getAllResultFromDB = async (query: Record<string, unknown>) => {
+    const resultQuery = new QueryBuilder(
+        Result.find()
+            .populate('user', 'name email')
+            .populate('topic', 'name')
+            .populate('category', 'name'),
+        query
+    )
+        .search(['name'])
+        .fields()
+        .filter()
+        .paginate()
+        .sort();
+    const result = await resultQuery.modelQuery;
+    const meta = await resultQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
 };
 
-const getMyResultFromDB = async (profileId: string) => {
-    const results = await Result.find({ user: profileId })
-        .populate('user', 'name email')
-        .populate('topic', 'name')
-        .populate('category', 'name');
-    return results;
+const getMyResultFromDB = async (
+    profileId: string,
+    query: Record<string, unknown>
+) => {
+    const resultQuery = new QueryBuilder(
+        Result.find({ user: profileId })
+            .populate('user', 'name email')
+            .populate('topic', 'name')
+            .populate('category', 'name'),
+        query
+    )
+        .search(['name'])
+        .fields()
+        .filter()
+        .paginate()
+        .sort();
+    const result = await resultQuery.modelQuery;
+    const meta = await resultQuery.countTotal();
+
+    return {
+        meta,
+        result,
+    };
 };
 
 const ResultServices = { submitQuiz, getAllResultFromDB, getMyResultFromDB };

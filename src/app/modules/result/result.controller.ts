@@ -16,7 +16,7 @@ const submitQuiz = catchAsync(async (req, res) => {
     });
 });
 const getAllResult = catchAsync(async (req, res) => {
-    const result = await resultServices.getAllResultFromDB();
+    const result = await resultServices.getAllResultFromDB(req.query);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -25,7 +25,10 @@ const getAllResult = catchAsync(async (req, res) => {
     });
 });
 const getMyResults = catchAsync(async (req, res) => {
-    const result = await resultServices.getMyResultFromDB(req.user.profileId);
+    const result = await resultServices.getMyResultFromDB(
+        req.user.profileId,
+        req.query
+    );
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

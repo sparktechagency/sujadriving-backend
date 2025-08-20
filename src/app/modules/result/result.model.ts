@@ -19,6 +19,7 @@ const resultSchema = new Schema<IResult>(
         wrongAnswers: { type: Number, required: true },
         accuracy: { type: Number, required: true },
         score: { type: Number, required: true },
+        testType: { type: String, required: true },
     },
     { timestamps: true }
 );

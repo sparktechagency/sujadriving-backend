@@ -9,4 +9,5 @@ export interface IResult {
     wrongAnswers: number;
     accuracy: number;
     score: number;
+    testType: string;
 }
