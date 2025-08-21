@@ -61,6 +61,10 @@ const userSchema = new Schema<TUser>(
         googleId: {
             type: String,
         },
+        playerIds: {
+            type: [String],
+            default: [],
+        },
     },
     {
         timestamps: true,
