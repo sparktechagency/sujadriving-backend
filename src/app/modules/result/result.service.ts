@@ -83,7 +83,6 @@ const getMyResultFromDB = async (
 ) => {
     const resultQuery = new QueryBuilder(
         Result.find({ user: profileId })
-            .populate('user', 'name email')
             .populate('topic', 'name')
             .populate('category', 'name'),
         query
