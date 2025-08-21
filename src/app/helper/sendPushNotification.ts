@@ -49,6 +49,29 @@ const sendNotification = async (
     }
 };
 
+export const sendPushNotificationToEveryone = async (
+    title: string,
+    message: string,
+    data: NotificationData = {}
+) => {
+    await axios.post(
+        'https://onesignal.com/api/v1/notifications',
+        {
+            app_id: process.env.ONESIGNAL_APP_ID,
+            included_segments: ['All'], // or specific user_ids
+            headings: { en: title },
+            contents: { en: message },
+            data,
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${ONESIGNAL_API_KEY}`,
+            },
+        }
+    );
+};
+
 // Send notification to single user by userId
 export const sendSinglePushNotification = async (
     userId: string,
