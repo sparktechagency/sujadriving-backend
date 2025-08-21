@@ -12,7 +12,7 @@ const createHazardVideo = async (payload: IHazardVideo) => {
     const result = await HazardVideo.create(payload);
     Notification.create({
         title: 'New Hazard Video Added',
-        message: `A new hazard video has been added for topic ${result.hazardTopic}`,
+        message: `A new hazard video has been added for topic ${result.hazardTopic} , start your practice now!`,
         receiver: 'all',
         type: 'hazard_video',
     });
