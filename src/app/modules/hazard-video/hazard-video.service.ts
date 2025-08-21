@@ -4,10 +4,23 @@ import { IHazardVideo } from './hazard-video.interface';
 import HazardVideo from './hazard-video.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { deleteFileFromS3 } from '../../helper/deleteFromS3';
+import Notification from '../notification/notification.model';
+import { sendPushNotificationToEveryone } from '../../helper/sendPushNotification';
 
 // Create
 const createHazardVideo = async (payload: IHazardVideo) => {
     const result = await HazardVideo.create(payload);
+    Notification.create({
+        title: 'New Hazard Video Added',
+        message: `A new hazard video has been added for topic ${result.hazardTopic}`,
+        receiver: 'all',
+        type: 'hazard_video',
+    });
+    sendPushNotificationToEveryone(
+        'New Hazard Video Added',
+        `A new hazard video has been added for topic ${result.hazardTopic}`,
+        { videoId: result._id.toString() }
+    );
     return result;
 };
 
