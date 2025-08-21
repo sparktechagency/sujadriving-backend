@@ -26,7 +26,10 @@ const createHazardVideo = async (payload: IHazardVideo) => {
 
 // Get all
 const getAllHazardVideos = async (query: Record<string, unknown>) => {
-    const hazardVideoQuery = new QueryBuilder(HazardVideo.find(), query)
+    const hazardVideoQuery = new QueryBuilder(
+        HazardVideo.find().populate('hazardTopic', 'name topic_icon'),
+        query
+    )
         .search(['video_url'])
         .fields()
         .filter()
