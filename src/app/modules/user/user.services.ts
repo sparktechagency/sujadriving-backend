@@ -20,7 +20,11 @@ const generateVerifyCode = (): number => {
 };
 
 const registerUser = async (
-    payload: INormalUser & { password: string; confirmPassword: string }
+    payload: INormalUser & {
+        password: string;
+        confirmPassword: string;
+        playerId?: string;
+    }
 ) => {
     const { password, confirmPassword, ...userData } = payload;
     if (password !== confirmPassword) {
@@ -46,7 +50,9 @@ const registerUser = async (
             verifyCode,
             codeExpireIn: new Date(Date.now() + 5 * 60000),
         };
-
+        if (payload.playerId) {
+            userDataPayload.playerIds = [payload.playerId];
+        }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const user = await User.create([userDataPayload], { session });
 
