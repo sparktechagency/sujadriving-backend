@@ -14,10 +14,11 @@ router.patch(
     auth(USER_ROLE.superAdmin, USER_ROLE.user),
     notificationController.seeNotification
 );
+
 router.delete(
     '/delete-notification/:id',
-    auth(USER_ROLE.superAdmin, USER_ROLE.user),
-    notificationController.deleteNoficiation
+    auth(USER_ROLE.user, USER_ROLE.superAdmin),
+    notificationController.deleteNotification
 );
-
+//
 export const notificationRoutes = router;

@@ -26,16 +26,16 @@ const seeNotification = catchAsync(async (req, res) => {
         data: result,
     });
 });
-const deleteNoficiation = catchAsync(async (req, res) => {
-    const result = await notificationService.deleteNoficiation(
-        req.params.id,
-        req?.user.profileId
-    );
 
+const deleteNotification = catchAsync(async (req, res) => {
+    const result = await notificationService.deleteNotification(
+        req.params.id,
+        req.user.profileId
+    );
     sendResponse(res, {
         statusCode: 200,
         success: true,
-        message: 'Notification deleted successfully',
+        message: 'Notification removed',
         data: result,
     });
 });
@@ -43,7 +43,7 @@ const deleteNoficiation = catchAsync(async (req, res) => {
 const notificationController = {
     getAllNotification,
     seeNotification,
-    deleteNoficiation,
+    deleteNotification,
 };
 
 export default notificationController;
