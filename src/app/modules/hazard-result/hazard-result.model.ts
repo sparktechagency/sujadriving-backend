@@ -15,6 +15,7 @@ const HazardResultSchema = new Schema<IHazardResult>(
         },
         topic: {
             type: Schema.Types.ObjectId,
+            ref: 'HazardTopic',
             required: true,
         },
         rightSubmission: {

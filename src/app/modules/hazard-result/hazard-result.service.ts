@@ -73,7 +73,7 @@ const getMyHazardResults = async (
     query: Record<string, unknown>
 ) => {
     const resultQuery = new QueryBuilder(
-        HazardResult.find({ user: profileId }).populate('topic', 'name'),
+        HazardResult.find({ user: profileId }).populate({ path: 'topic' }),
         query
     )
         .search([''])
