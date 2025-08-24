@@ -54,7 +54,13 @@ const createHazardResultResult = async (
 };
 
 const getAllHazardResultResult = async (query: Record<string, unknown>) => {
-    const resultQuery = new QueryBuilder(HazardResult.find(), query)
+    const resultQuery = new QueryBuilder(
+        HazardResult.find()
+            .populate({ path: 'topic', select: 'name' })
+            .populate({ path: 'video' })
+            .populate({ path: 'user', select: 'name profile_image' }),
+        query
+    )
         .search([''])
         .fields()
         .filter()
