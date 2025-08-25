@@ -5,6 +5,9 @@ import Category from '../category/category.model';
 import { Topic } from './topic.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { deleteFileFromS3 } from '../../helper/deleteFromS3';
+import { ENUM_NOTIFICATION_TYPE } from '../../utilities/enum';
+import Notification from '../notification/notification.model';
+import { sendPushNotificationToEveryone } from '../../helper/sendPushNotification';
 
 // Create Topic
 const createTopic = async (payload: ITopic) => {
@@ -17,6 +20,18 @@ const createTopic = async (payload: ITopic) => {
     }
 
     const result = await Topic.create(payload);
+
+    Notification.create({
+        title: 'New Topic Added',
+        message: `A new topic: ${result.name} has been added in you practice  , start your practice now!`,
+        receiver: 'all',
+        type: ENUM_NOTIFICATION_TYPE.TOPIC,
+    });
+    sendPushNotificationToEveryone(
+        'New Topic Added',
+        `A new topic ${result.name} has been added in you practice  , start your practice now!`,
+        { topicId: result._id.toString() }
+    );
     return result;
 };
 

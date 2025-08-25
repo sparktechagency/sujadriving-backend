@@ -15,10 +15,10 @@ import { JwtPayload } from 'jsonwebtoken';
 import { createToken } from './user.utils';
 import config from '../../config';
 import SuperAdmin from '../superAdmin/superAdmin.model';
-const generateVerifyCode = (): number => {
-    return Math.floor(10000 + Math.random() * 900000);
-};
 
+const generateVerifyCode = (): number => {
+    return Math.floor(100000 + Math.random() * 900000);
+};
 const registerUser = async (
     payload: INormalUser & {
         password: string;
@@ -27,6 +27,7 @@ const registerUser = async (
     }
 ) => {
     const { password, confirmPassword, ...userData } = payload;
+    console.log('register user in db=================>', payload);
     if (password !== confirmPassword) {
         throw new AppError(
             httpStatus.BAD_REQUEST,
