@@ -22,6 +22,7 @@ const generateVerifyCode = (): number => {
     return Math.floor(10000 + Math.random() * 900000);
 };
 const loginUserIntoDB = async (payload: TLoginUser) => {
+    console.log('payload', payload);
     const user = await User.findOne({ email: payload.email });
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, 'This user does not exist');
@@ -49,15 +50,12 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
     if (payload.playerId) {
         const currentPlayerIds = user.playerIds || [];
 
-        // If already exists, remove it first (to avoid duplicates)
         const filtered = currentPlayerIds.filter(
             (id) => id !== payload.playerId
         );
 
-        // Add the new one to the end
         filtered.push(payload.playerId);
 
-        // If length > 3, remove from beginning
         if (filtered.length > 3) {
             filtered.shift();
         }
@@ -65,6 +63,7 @@ const loginUserIntoDB = async (payload: TLoginUser) => {
         user.playerIds = filtered;
         await user.save();
     }
+    console.log('user', user);
     const jwtPayload = {
         id: user?._id,
         profileId: user.profileId,
@@ -92,13 +91,11 @@ const loginWithGoogle = async (payload: ILoginWithGoogle) => {
     session.startTransaction();
 
     try {
-        // Check if the user already exists
         const isExistUser = await User.findOne(
             { email: payload.email },
             { isVerified: true }
         ).session(session);
 
-        // If user exists, create JWT and return tokens
         if (isExistUser) {
             const jwtPayload = {
                 id: isExistUser._id,
