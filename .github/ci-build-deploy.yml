@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: 
-      - closed
 
 env:
   DEPLOY_PATH: /var/www/sujadriving-backend
