@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Category from '../category/category.model';
+import HazardVideo from '../hazard-video/hazard-video.model';
 import NormalUser from '../normalUser/normalUser.model';
+import { Topic } from '../topic/topic.model';
 
 const getDashboardMetaData = async () => {
-    const totalUser = await NormalUser.countDocuments();
+    const [totalUser, totalTopic, totalHazardVideo] = await Promise.all([
+        NormalUser.countDocuments(),
+        Category.countDocuments(),
+        Topic.countDocuments(),
+        HazardVideo.countDocuments(),
+    ]);
+
     return {
         totalUser,
+        totalTopic,
+        totalHazardVideo,
+        totalIncome: 0,
     };
 };
 

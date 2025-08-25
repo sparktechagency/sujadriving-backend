@@ -19,6 +19,7 @@ import { subscriptionPurchaseRoutes } from '../modules/subscription-purchase/sub
 import { hazardTopicRoutes } from '../modules/hazard-topic/hazard-topic.routes';
 import { hazardResultRoutes } from '../modules/hazard-result/hazard-result.routes';
 import { resultRoutes } from '../modules/result/result.routes';
+import { superAdminRoutes } from '../modules/superAdmin/superAdmin.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -33,6 +34,10 @@ const moduleRoutes = [
     {
         path: '/normal-user',
         router: normalUserRoutes,
+    },
+    {
+        path: '/super-admin',
+        router: superAdminRoutes,
     },
 
     {
