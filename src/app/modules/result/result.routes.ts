@@ -24,5 +24,10 @@ router.get(
     auth(USER_ROLE.user),
     resultController.getMyResults
 );
+router.get(
+    '/get-home-data',
+    auth(USER_ROLE.user),
+    resultController.getHomeData
+);
 
 export const resultRoutes = router;

@@ -36,6 +36,20 @@ const getMyResults = catchAsync(async (req, res) => {
         data: result,
     });
 });
+const getHomeData = catchAsync(async (req, res) => {
+    const result = await resultServices.getHomeData(req.user.profileId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Home data retrieved successfully',
+        data: result,
+    });
+});
 
-const ResultController = { submitQuiz, getAllResult, getMyResults };
+const ResultController = {
+    submitQuiz,
+    getAllResult,
+    getMyResults,
+    getHomeData,
+};
 export default ResultController;

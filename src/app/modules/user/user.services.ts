@@ -227,6 +227,8 @@ cron.schedule('*/2 * * * *', async () => {
                 `Deleted ${normalUserDeleteResult.deletedCount} associated NormalUser documents`
             );
         }
+
+        console.log('Finished deleting expired users and associated data.');
     } catch (error) {
         console.log('Error deleting expired users and associated data:', error);
     }
