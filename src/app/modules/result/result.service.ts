@@ -105,76 +105,71 @@ const getMyResultFromDB = async (
 };
 
 const getHomeData = async (profileId: string) => {
-    try {
-        const [theoryResult, adiResult, hazardResult, progressResults] =
-            await Promise.all([
-                Result.findOne({
-                    user: profileId,
-                    testType: ENUM_TEST_TYPE.THEORY,
-                })
-                    .sort({ createdAt: -1 })
-                    .limit(1)
-                    .populate('topic', 'name'),
+    const [theoryResult, adiResult, hazardResult, progressResults] =
+        await Promise.all([
+            Result.findOne({
+                user: profileId,
+                testType: ENUM_TEST_TYPE.THEORY,
+            })
+                .sort({ createdAt: -1 })
+                .limit(1)
+                .populate('topic', 'name'),
 
-                Result.findOne({
-                    user: profileId,
-                    testType: ENUM_TEST_TYPE.ADI,
-                })
-                    .sort({ createdAt: -1 })
-                    .limit(1)
-                    .populate('topic', 'name'),
+            Result.findOne({
+                user: profileId,
+                testType: ENUM_TEST_TYPE.ADI,
+            })
+                .sort({ createdAt: -1 })
+                .limit(1)
+                .populate('topic', 'name'),
 
-                HazardResult.findOne({ user: profileId })
-                    .sort({ createdAt: -1 })
-                    .limit(1)
-                    .populate('hazardTopic', 'name'),
+            HazardResult.findOne({ user: profileId })
+                .sort({ createdAt: -1 })
+                .limit(1)
+                .populate('topic', 'name'),
 
-                Result.aggregate([
-                    {
-                        $match: {
-                            user: new mongoose.Types.ObjectId(profileId),
-                        },
+            Result.aggregate([
+                {
+                    $match: {
+                        user: new mongoose.Types.ObjectId(profileId),
                     },
-                    {
-                        $group: {
-                            _id: '$testType',
-                            totalQuestions: { $sum: '$totalQuestions' },
-                            totalCorrectAnswers: { $sum: '$correctAnswers' },
-                        },
+                },
+                {
+                    $group: {
+                        _id: '$testType',
+                        totalQuestions: { $sum: '$totalQuestions' },
+                        totalCorrectAnswers: { $sum: '$correctAnswers' },
                     },
-                ]),
-            ]);
+                },
+            ]),
+        ]);
 
-        let theoryProgress = 0;
-        let adiProgress = 0;
+    let theoryProgress = 0;
+    let adiProgress = 0;
 
-        if (progressResults.length > 0) {
-            progressResults.forEach((result) => {
-                const { totalQuestions, totalCorrectAnswers } = result;
-                const progress = (totalCorrectAnswers / totalQuestions) * 100;
+    if (progressResults.length > 0) {
+        progressResults.forEach((result) => {
+            const { totalQuestions, totalCorrectAnswers } = result;
+            const progress = (totalCorrectAnswers / totalQuestions) * 100;
 
-                if (result._id === ENUM_TEST_TYPE.THEORY) {
-                    theoryProgress = progress;
-                } else if (result._id === ENUM_TEST_TYPE.ADI) {
-                    adiProgress = progress;
-                }
-            });
-        }
-
-        const TheoryProgress = theoryProgress.toFixed(2);
-        const ADIProgress = adiProgress.toFixed(2);
-
-        return {
-            theoryResult,
-            adiResult,
-            hazardResult,
-            TheoryProgress,
-            ADIProgress,
-        };
-    } catch (error) {
-        console.error('Error fetching results:', error);
-        throw new Error('Could not fetch user results');
+            if (result._id === ENUM_TEST_TYPE.THEORY) {
+                theoryProgress = progress;
+            } else if (result._id === ENUM_TEST_TYPE.ADI) {
+                adiProgress = progress;
+            }
+        });
     }
+
+    const TheoryProgress = theoryProgress.toFixed(2);
+    const ADIProgress = adiProgress.toFixed(2);
+
+    return {
+        theoryResult,
+        adiResult,
+        hazardResult,
+        TheoryProgress,
+        ADIProgress,
+    };
 };
 
 const ResultServices = {
