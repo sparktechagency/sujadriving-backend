@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-vars */
 
-import { User } from './user.model';
-import AppError from '../../error/appError';
 import httpStatus from 'http-status';
-import { INormalUser } from '../normalUser/normalUser.interface';
-import mongoose from 'mongoose';
-import { TUser, TUserRole } from './user.interface';
-import { USER_ROLE } from './user.constant';
-import NormalUser from '../normalUser/normalUser.model';
-import registrationSuccessEmailBody from '../../mailTemplate/registerSucessEmail';
-import cron from 'node-cron';
-import sendEmail from '../../utilities/sendEmail';
 import { JwtPayload } from 'jsonwebtoken';
-import { createToken } from './user.utils';
+import mongoose from 'mongoose';
+import cron from 'node-cron';
 import config from '../../config';
+import AppError from '../../error/appError';
+import registrationSuccessEmailBody from '../../mailTemplate/registerSucessEmail';
+import sendEmail from '../../utilities/sendEmail';
+import { INormalUser } from '../normalUser/normalUser.interface';
+import NormalUser from '../normalUser/normalUser.model';
 import SuperAdmin from '../superAdmin/superAdmin.model';
+import { USER_ROLE } from './user.constant';
+import { TUser, TUserRole } from './user.interface';
+import { User } from './user.model';
+import { createToken } from './user.utils';
 
 const generateVerifyCode = (): number => {
     return Math.floor(100000 + Math.random() * 900000);
@@ -27,7 +27,6 @@ const registerUser = async (
     }
 ) => {
     const { password, confirmPassword, ...userData } = payload;
-    console.log('register user in db=================>', payload);
     if (password !== confirmPassword) {
         throw new AppError(
             httpStatus.BAD_REQUEST,
